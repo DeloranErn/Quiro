@@ -3,30 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DELORAN</title>
+  <title>Dynamic Profile Card</title>
+
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
-    /* Gradient background and centering */
+    /* === Global Styles === */
     body {
       height: 100vh;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #00ff88, #000000);
       font-family: 'Poppins', sans-serif;
       color: white;
+      background: linear-gradient(-45deg, #00ff88, #fff700, #00ff88, #fff700);
+      background-size: 400% 400%;
+      animation: gradientFlow 10s ease infinite;
     }
 
-    /* Profile Card */
+    /* === Animated Gradient Background === */
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* === Profile Card === */
     .card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
+      border-radius: 20px;
       padding: 30px;
       text-align: center;
       width: 300px;
       backdrop-filter: blur(10px);
+      transition: 
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        background-color 1s ease,
+        color 1s ease;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
 
     .card:hover {
@@ -34,54 +50,95 @@
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
     }
 
-    /* Profile Picture */
-    .profile-img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #00ff88;
-      margin-bottom: 15px;
-      animation: pulse 2s infinite alternate;
-    }
+    /* === Profile Picture with Animated Border === */
+.profile-img {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  z-index: 1;
+  animation: pulse 2s infinite alternate;
+}
 
-    @keyframes pulse {
-      from { transform: scale(1); }
-      to { transform: scale(1.05); }
-    }
+/* The glowing circular animated border */
+.profile-img::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border-radius: 50%;
+  background: linear-gradient(45deg, #00ff88, #fff700, #00ff88);
+  background-size: 300% 300%;
+  animation: borderSpin 5s linear infinite;
+  z-index: -1;
+}
 
-    h2, p {
+/* Animations */
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+@keyframes borderSpin {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+    /* === Text Styles === */
+    h2 {
+      font-weight: 600;
       margin: 10px 0;
     }
 
     .info {
       font-size: 1rem;
-      opacity: 0.8;
+      opacity: 0.85;
+      margin: 5px 0;
     }
 
-    /* Button to update info dynamically */
+    /* === Animated Button (No Black) === */
     button {
       margin-top: 15px;
       padding: 10px 20px;
       border: none;
       border-radius: 8px;
-      background-color: #00ff88;
-      color: black;
-      font-weight: bold;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
+      transition: transform 0.3s ease;
+      background: linear-gradient(45deg, #00ff88, #fff700, #00ff88, #fff700);
+      background-size: 400% 400%;
+      animation: gradientFlow 5s ease infinite;
+      color: black;
     }
 
     button:hover {
-      background-color: #00cc6a;
       transform: scale(1.05);
+    }
+
+    /* === Responsive === */
+    @media (max-width: 500px) {
+      .card {
+        width: 85%;
+        padding: 20px;
+      }
+      .profile-img {
+        width: 80px;
+        height: 80px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-img">
+  <div class="card" id="card">
+    <img src="https://avatars.githubusercontent.com/u/241029349?v=4" alt="Profile Picture" class="profile-img">
     <h2 id="name">Ernaldo Jr Quiro</h2>
     <p class="info" id="section">BSIT 3F</p>
     <p class="info" id="age">21 Years Old</p>
@@ -89,6 +146,7 @@
   </div>
 
   <script>
+    // === Dynamic Info Update ===
     function updateInfo() {
       const name = prompt("Enter your name:");
       const section = prompt("Enter your section:");
@@ -98,6 +156,37 @@
       if (section) document.getElementById("section").textContent = "Section: " + section;
       if (age) document.getElementById("age").textContent = "Age: " + age;
     }
+
+    // === Adaptive Contrast ===
+    const card = document.getElementById("card");
+
+    function getBackgroundColor() {
+      const computedStyle = window.getComputedStyle(document.body);
+      const bg = computedStyle.backgroundImage;
+      const match = bg.match(/#(?:[0-9a-fA-F]{3}){1,2}/g);
+      if (!match) return "#00ff88";
+      const color = match[Math.floor(Date.now() / 2000) % match.length];
+      return color;
+    }
+
+    function adjustContrast() {
+      const hex = getBackgroundColor();
+      const bigint = parseInt(hex.slice(1), 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+      if (brightness > 160) {
+        card.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        card.style.color = "white";
+      } else {
+        card.style.backgroundColor = "rgba(255, 255, 255, 0.25)";
+        card.style.color = "black";
+      }
+    }
+
+    setInterval(adjustContrast, 1000);
   </script>
 
 </body>
