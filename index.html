@@ -1,67 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Web Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 15px 0;
-            text-align: center;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #444;
-            padding: 10px 0;
-        }
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        main {
-            padding: 20px;
-            text-align: center;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DELORAN</title>
+  <style>
+    /* Gradient background and centering */
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #00ff88, #000000);
+      font-family: 'Poppins', sans-serif;
+      color: white;
+    }
+
+    /* Profile Card */
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      width: 300px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Profile Picture */
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #00ff88;
+      margin-bottom: 15px;
+      animation: pulse 2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    h2, p {
+      margin: 10px 0;
+    }
+
+    .info {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    /* Button to update info dynamically */
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #00ff88;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00cc6a;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>WELCOME</h1>
-    </header>
 
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-    </nav>
+  <div class="card">
+    <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-img">
+    <h2 id="name">Ernaldo Jr Quiro</h2>
+    <p class="info" id="section">BSIT 3F</p>
+    <p class="info" id="age">21 Years Old</p>
+    <button onclick="updateInfo()">Edit Info</button>
+  </div>
 
-    <main>
-        <h2>This is my Web Page</h2>
-        <p> Skibidi Toilet </p>
-    </main>
+  <script>
+    function updateInfo() {
+      const name = prompt("Enter your name:");
+      const section = prompt("Enter your section:");
+      const age = prompt("Enter your age:");
 
-    <footer>
-        <p>Copyright © 2025</p>
-    </footer>
+      if (name) document.getElementById("name").textContent = name;
+      if (section) document.getElementById("section").textContent = "Section: " + section;
+      if (age) document.getElementById("age").textContent = "Age: " + age;
+    }
+  </script>
+
 </body>
 </html>
